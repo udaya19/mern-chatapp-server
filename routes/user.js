@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../model/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { isAuth } = require("../middlewares/auth");
 router.post("/register", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -64,6 +65,28 @@ router.post("/login", async (req, res) => {
     return res.status(500).json({
       success: false,
       error: error.message,
+    });
+  }
+});
+
+router.get("/me", isAuth, async (req, res) => {
+  try {
+    const user = await User.findById(req.body.userId);
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found",
+        success: false,
+      });
+    }
+    return res.status(200).json({
+      message: "Profile fetched successfully",
+      user,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+      success: false,
     });
   }
 });
