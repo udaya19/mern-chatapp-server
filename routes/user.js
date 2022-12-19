@@ -91,4 +91,20 @@ router.get("/me", isAuth, async (req, res) => {
   }
 });
 
+router.get("/all-users", isAuth, async (req, res) => {
+  try {
+    const allUsers = await User.find({ _id: { $ne: req.body.userId } });
+    res.status(200).json({
+      success: false,
+      message: "Users fetched succesfully",
+      allUsers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
