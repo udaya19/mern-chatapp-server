@@ -19,6 +19,7 @@ try {
 app.use(express.json());
 app.use(cors());
 app.use("/api/v1/users", require("./routes/user"));
+app.use("/api/v1/chats", require("./routes/chat"));
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
