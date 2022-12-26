@@ -22,7 +22,9 @@ router.post("/create-new-chat", isAuth, async (req, res) => {
 
 router.get("/get-all-chats", isAuth, async (req, res) => {
   try {
-    const chats = await Chat.find({ members: { $in: [req.body.userId] } });
+    const chats = await Chat.find({
+      members: { $in: [req.body.userId] },
+    }).populate("members");
     res.json({
       success: true,
       message: "Chat fetched succesfully",
